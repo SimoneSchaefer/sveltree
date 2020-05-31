@@ -36,7 +36,6 @@
     "svelte"
   ],
   "files": [
-    "src",
     "dist"
   ],
   "dependencies": {}
