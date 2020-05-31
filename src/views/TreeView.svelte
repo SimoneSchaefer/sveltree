@@ -1,5 +1,5 @@
 <script>
-    import Tree from './Tree.svelte'
+    import Tree from '../Tree.svelte'
     export let treeItems;
     let selected;
     let newOrder;
