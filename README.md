@@ -31,10 +31,10 @@ treeItems = {
   ...
   ```
 and use it in your component like this: 
-```<Tree 
-            treeItems={treeItems}
-            on:selected={(item) => selected = item.detail}
-            on:orderChanged={(items) => {treeItems = items.detail}}></Tree>
+```
+<Tree treeItems={treeItems}
+     on:selected={(item) => selected = item.detail}
+     on:orderChanged={(items) => {treeItems = items.detail}}></Tree>
 ``` 
 See storybook for an example:
 
