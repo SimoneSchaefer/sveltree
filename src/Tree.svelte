@@ -4,11 +4,7 @@
 
     const dispatch = createEventDispatcher();
 
-    // const { getTreeItems } = getContext('treeItems');
-    // const treeItems = getTreeItems();
     export let treeItems;
-
-    export let refresh = false;
 
     let dragging;
     setContext('dragging', {
@@ -16,7 +12,6 @@
     });
 
     function selectItem(item) {
-        console.log('selected item: ' + item);
         dispatch('selected', findByIndexPath(item.slice(), treeItems))
     }
 
@@ -68,39 +63,23 @@
         const draggedItem = findByIndexPath(oldPosition.slice(), treeItems);
 
         // insert draggedItem at the new position
-        console.log('new parent by index ' + JSON.stringify(newPosition), newParent);
-
-        const newChildren = newParent.children.slice();
-        newChildren.splice(newPosition.slice().pop(), 0, draggedItem);
-        newParent.children = newChildren;
+        newParent.children.splice(newPosition.slice().pop(), 0, draggedItem);
 
         // remove the draggedItem from the old position.
         // If we just moved the element within the same parent, 
         // we must consider that it is present now twice within the children. 
         const index = indexToRemove(oldParent, newParent, newPosition.slice(), draggedItem);
-        console.log('index to remove is ' + index);
         oldParent.children.splice(index, 1);
-        draggedItem.refresh = new Array();
-
-        treeItems = JSON.parse(JSON.stringify(treeItems));
-        //treeItems.children = treeItems.children.slice();
-
-        dispatch('orderChanged', treeItems)
-
         dragging = null;
-
-        refresh = new Array();
+        dispatch('orderChanged', treeItems)
     }
-
 </script>
 
 <div class="tree">
     {#if treeItems}
-        <Node  {...treeItems} expanded refresh
+        <Node  {...treeItems} expanded
             on:selected={(treeItem) => selectItem(treeItem.detail)} 
             on:dragstart={(event) => dragStart(event)}
             on:drop={handleDrop} />
-    {:else}
-        <p class="loading">loading...</p>
     {/if}
 </div>
