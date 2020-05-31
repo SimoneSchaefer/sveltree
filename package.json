@@ -1,6 +1,6 @@
 {
-  "name": "svelte-component-library",
-  "version": "0.2.0",
+  "name": "sveltree",
+  "version": "0.0.1",
   "svelte": "src/index.js",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
@@ -36,7 +36,7 @@
     "svelte"
   ],
   "files": [
-    "src",
+    "src/index.js",
     "dist"
   ],
   "dependencies": {}

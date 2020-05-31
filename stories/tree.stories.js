@@ -1,5 +1,4 @@
-import {TreeView} from '../src/index';
-import { action } from '@storybook/addon-actions';
+import TreeView from '../src/views/TreeView.svelte';
 
 export default {
   title: 'Tree',
