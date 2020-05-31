@@ -36,7 +36,7 @@
     "svelte"
   ],
   "files": [
-    "src/index.js",
+    "src",
     "dist"
   ],
   "dependencies": {}
