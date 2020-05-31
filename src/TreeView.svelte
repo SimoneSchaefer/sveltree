@@ -20,8 +20,7 @@
         <Tree 
             treeItems={treeItems}
             on:selected={(item) => selected = item.detail}
-            on:orderChanged={(items) => {treeItems = items.detail}}
-            ></Tree>
+            on:orderChanged={(items) => {treeItems = items.detail}}></Tree>
     </div>
     <div>
         <h2>Current items: </h2>

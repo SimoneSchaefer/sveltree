@@ -17,11 +17,13 @@
     // The prefix helps to find an elementÄs position within the tree
     export let prefix = null;  
 
-    export let refresh = false;
 
     //////////////////// OTHER MEMBERS/////////////////////////
     // Set to true when this folder's dropzone is currently dragged over     
     let draggingOver = false;
+
+    $:isLeafNode = !Array.isArray(children);
+    $:isRootNode = prefix === null;
               
     //////////////////FUNCTIONS//////////////////////////
     // Called when this folder is shown/collapsed
@@ -51,15 +53,6 @@
         return 0;        
     }
 
-    // Whether this node is a leaf node or not
-    function isLeafNode() {
-        console.log('isLeafNode: ' + label + ', children: ', children);
-        return !Array.isArray(children);
-    }
-
-    function isRootNode() {
-        return prefix === null;
-    }
 
     // Called when something is dragged over this node's dropzone. 
     // If this drag action is allowed, the #draggingOver flag is set, in order to highlight the dropzone.
@@ -88,7 +81,6 @@
         }       
         cancelDrag();
     }
-
 
     function getPrefix(index) {
         if (prefix !== null) {
@@ -163,7 +155,7 @@
 
 
 <!-- DROPZONE -->
-{#if !isRootNode()}
+{#if !isRootNode}
 <div class={`dropzone ${draggingOver ? 'active' : 'idle'}`} 
     id={`dropzonebefore-${prefix}`}
     on:dragleave={($event)=>(cancelDrag($event))}  
@@ -172,12 +164,13 @@
     ondragover="return false"></div>
 {/if}
 
+
 <!-- DISPLAY ELEMENT -->
 <div draggable=true 
     on:dragstart={($event) => (dragStart($event))} 
     on:dragend={($event) => (cancelDrag($event))}
     id={prefix}>
-    {#if !isLeafNode()}
+    {#if !isLeafNode}
         <i class={`clickable chevron ${expanded ? "bottom" : "right"}`} on:click={toggle}></i>
         <span class="folderNode" on:click={() => select()}>{label}</span>
     {:else}
@@ -193,8 +186,6 @@
         {#each children as child, i}
             <li>
                 <svelte:self {...child} 
-                    refresh
-                    data
                     expanded
                     prefix={getPrefix(i)}
                     on:selected 
