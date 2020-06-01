@@ -42,13 +42,45 @@ let treeItems = {
 };
 
 
-export const Example = () => ({
+export const Basic = () => ({
   Component: TreeView,
   props: {
     treeItems: treeItems
   },
+  on: { 
+    orderChanged: (newOrder) => {
+      treeItems = newOrder;
+    }
+  }
+});
+
+
+export const CustomLabels = () => ({
+  Component: TreeView,
+  props: {
+    treeItems: treeItems,
+    options: {
+      labelFormatter: () => import ('../src/views/ExampleFormatter.svelte')
+    }
+  },
   on: { orderChanged: (newOrder) => {
-      console.log('new order', newOrder);
       treeItems = newOrder;
   }}
 });
+
+export const CustomClasses = () => ({
+  Component: TreeView,
+  props: {
+    treeItems: treeItems,
+    options: {
+      collapseClass:"fa fa-folder-open",
+      expandClass:"fa fa-folder",
+      labelFormatter: () => import ('../src/views/ExampleFormatter.svelte')
+
+    }
+  },
+  on: { orderChanged: (newOrder) => {
+      treeItems = newOrder;
+  }}
+});
+

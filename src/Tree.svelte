@@ -5,6 +5,18 @@
     const dispatch = createEventDispatcher();
 
     export let treeItems;
+    export let options;
+
+    let internalOptions = {
+        labelFormatter: () => import ('./DefaultLabelFormatter.svelte'),
+        collapseClass: 'chevron bottom',
+        expandClass : 'chevron right'
+    };
+
+    onMount(async () => {    
+        internalOptions = Object.assign(internalOptions, options);
+    });
+         
 
     let dragging;
     setContext('dragging', {
@@ -75,9 +87,14 @@
     }
 </script>
 
+
+
 <div class="tree">
     {#if treeItems}
-        <Node  {...treeItems} expanded
+        <Node  
+            {...treeItems} 
+            internalOptions={internalOptions}
+            expanded 
             on:selected={(treeItem) => selectItem(treeItem.detail)} 
             on:dragstart={(event) => dragStart(event)}
             on:drop={handleDrop} />

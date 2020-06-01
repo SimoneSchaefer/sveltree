@@ -1,7 +1,8 @@
 <script>
-    import { getContext, createEventDispatcher } from "svelte";
-    import Dropzone from './Dropzone.svelte'
+    import { onMount, getContext, createEventDispatcher } from "svelte";
 
+    import Dropzone from './Dropzone.svelte'
+    import Loadable from 'svelte-loadable'
     /////////////////////// EVENTS//////////////////////
     const dispatch = createEventDispatcher();
 
@@ -17,6 +18,14 @@
     export let label;
     // The prefix helps to find an element's position within the tree
     export let prefix = null;
+
+    export let internalOptions;
+
+    // (Optional)
+    // export let collapseClass;
+    // export let expandClass;
+    // (Optional)
+    // export let labelFormatter;
     // (Optional) data. This can be whatever you want, for example to identifier the node afterwards 
     export let data = null;  
 
@@ -25,9 +34,10 @@
     // Set to true when this folder's dropzone is currently dragged over     
     let draggingOver = false;
 
+
     $:isLeafNode = !Array.isArray(children);
     $:isRootNode = prefix === null;
-              
+     
     //////////////////FUNCTIONS//////////////////////////
     // Called when this folder is shown/collapsed
 	function toggle() {
@@ -43,9 +53,6 @@
     function cancelDrag() {
         draggingOver = false;
     }
-
-
-
 
     // Called when the user starts to drag something.
     // Dispatches an event to notfify the parent who needs to update the context value (see #getDragged).
@@ -89,27 +96,23 @@
     .clickable {
         cursor: pointer;
     }
-	span {
-		padding: 0 0 0 1.5em;
-		background-size: 1em 1em;
-		cursor: pointer;
-	}
-    .folderNode {
-		font-weight: bold;
-    }
-
-    .leafNode {
-        padding-left: 2.5em;
-    }
 	ul {
 		padding: 0.2em 0 0 0.5em;
 		margin: 0 0 0 0.5em;
 		list-style: none;
 	}
-
 	li {
 		padding: 0.2em 0;
 	}
+    .node-wrapper {
+        display: inline-block;
+    }
+    .toggle-icon {
+        padding-right: 0.5em;
+    }
+    .placeholder {
+        width: 1.5em;
+    }
 </style>
 
 
@@ -119,31 +122,34 @@
     <Dropzone on:drop prefix={prefix}/>
 {/if}
 
-
 <!-- DISPLAY ELEMENT -->
 <div draggable=true 
     on:dragstart={($event) => (dragStart($event))} 
     on:dragend={($event) => (cancelDrag($event))}
     id={prefix}>
     {#if !isLeafNode}
-        <i class={`clickable chevron ${expanded ? "bottom" : "right"}`} on:click={toggle}></i>
-        <span class="folderNode" on:click={() => select()}>{label}</span>
-    {:else}
-        <span class="clickable leafNode" on:click={() => select()}>{label}</span>
+        <i class={`clickable toggle-icon ${expanded ? internalOptions.collapseClass : internalOptions.expandClass}`} on:click={() => toggle()}></i>
     {/if}
+    <div class="node-wrapper" on:click={() => select()}>
+        <Loadable 
+            loader={internalOptions.labelFormatter} 
+            unloader={true} 
+            label={label} 
+            data={data} 
+            isLeafNode={isLeafNode}/>
+    </div>
 </div>
-
-
-
 
 <!-- CHILDREN  -->
 {#if expanded && !isLeafNode}
     <ul>
         {#each children as child, i}
             <li>
-                <svelte:self {...child} 
-                    expanded
-                    data
+                <svelte:self 
+                    {...child} 
+                    internalOptions={internalOptions}
+                    data={data}
+                    expanded={expanded}
                     prefix={getPrefix(i)}
                     on:selected 
                     on:dragenter 
