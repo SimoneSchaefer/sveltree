@@ -1,5 +1,5 @@
 # Sveltree
-A very basic drag-and-drop tree component for Svelte 3. 
+A simple drag-and-drop tree component for Svelte 3. 
 
 Define tree items like this:
 
@@ -36,7 +36,8 @@ and use it in your component like this:
      on:selected={(item) => selected = item.detail}
      on:orderChanged={(items) => {treeItems = items.detail}}></Tree>
 ``` 
-See storybook for an example:
+
+See storybook for usage examples:
 
 ```bash
 npm run storybook
