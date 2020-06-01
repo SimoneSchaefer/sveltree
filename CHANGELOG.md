@@ -1,9 +1,8 @@
-0.1.0 / 2020-04-04
+0.0.1 / 2020-06-01
 ==================
 
-# Provide svelte component library template
+# Provide first version of drag-and-drop tree
 
-* Basic Component.svelte
-* Testing using svelte-testing-library + Jest
-* Storybook
-* Rollup
+* Configure tree by object
+* Configurable collapse icons
+* Configurable label formatting
