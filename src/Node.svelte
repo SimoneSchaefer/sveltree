@@ -1,5 +1,6 @@
 <script>
     import { getContext, createEventDispatcher } from "svelte";
+    import Dropzone from './Dropzone.svelte'
 
     /////////////////////// EVENTS//////////////////////
     const dispatch = createEventDispatcher();
@@ -43,26 +44,8 @@
         draggingOver = false;
     }
 
-    // Whether dragging the currently dragged element onto this node's dropzone is allowed
-    // based on the structure member)
-    function dragAllowed(eventTargetId) {
-        return 1;
-
-        //TODO: config param if hierarchy needs to stay the same
-        const newFollowUpType = eventTargetId.split('-')[1];
-        if (newFollowUpType === getDragged().entityType) return 1;
-        if (structure.indexOf(newFollowUpType) === structure.indexOf(getDragged().entityType) - 1) return 2;
-        return 0;        
-    }
 
 
-    // Called when something is dragged over this node's dropzone. 
-    // If this drag action is allowed, the #draggingOver flag is set, in order to highlight the dropzone.
-    function handleDragEnter(event) {
-        if (!event.target || !event.target.id) return;
-        if (dragAllowed(event.target.id) === 0) { return;}
-        draggingOver = true;       
-    }
 
     // Called when the user starts to drag something.
     // Dispatches an event to notfify the parent who needs to update the context value (see #getDragged).
@@ -71,18 +54,6 @@
         dispatch('dragstart', event.target.id.split('-'));
     }
 
-    // Called when something is dropped onto the dropzone. 
-    // Dispatches an event to notify the parent.
-    function drop(event) {
-        if (!event.target || !event.target.id) return;
-        if (dragAllowed(event.target.id) > 0) {
-            dispatch('drop', {
-                oldPosition: getDragged(),
-                newPosition: event.target.id.split('-'),
-            });
-        }       
-        cancelDrag();
-    }
 
     function getPrefix(index) {
         if (prefix !== null) {
@@ -115,10 +86,6 @@
         top: 0;
         transform: rotate(135deg);
     }
-    .chevron.left:before {
-        left: 0.25em;
-        transform: rotate(-135deg);
-    }
     .clickable {
         cursor: pointer;
     }
@@ -143,27 +110,13 @@
 	li {
 		padding: 0.2em 0;
 	}
-
-    .dropzone.idle {
-        height: 3px;
-    }
-    .dropzone.active {
-        background-color: #d2d2d2;
-        border: 1px dotted #6d6d6d;
-        height: 24px;
-    }
 </style>
 
 
 
 <!-- DROPZONE -->
 {#if !isRootNode}
-    <div class={`dropzone ${draggingOver ? 'active' : 'idle'}`} 
-        id={`dropzonebefore-${prefix}`}
-        on:dragleave={($event)=>(cancelDrag($event))}  
-        on:dragenter={($event)=>(handleDragEnter($event))}  
-        on:drop={($event) => (drop($event))} 
-        ondragover="return false"></div>
+    <Dropzone on:drop prefix={prefix}/>
 {/if}
 
 
@@ -184,7 +137,7 @@
 
 
 <!-- CHILDREN  -->
-{#if expanded && children}
+{#if expanded && !isLeafNode}
     <ul>
         {#each children as child, i}
             <li>
@@ -200,5 +153,8 @@
                     on:drop/>
             </li>
         {/each}
+        <li>
+            <Dropzone on:drop prefix={getPrefix(children.length)}/>
+        </li>
     </ul>
 {/if}
