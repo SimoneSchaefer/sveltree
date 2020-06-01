@@ -12,10 +12,12 @@
     export let expanded = false;
     // The entity's child elements. If not present, this is assumed to be a leaf node. 
     export let children = null;
-    // The entity associated with this node, e.g. a part, chapter or scene
+    // The label of this node
     export let label;
-    // The prefix helps to find an elementÄs position within the tree
-    export let prefix = null;  
+    // The prefix helps to find an element's position within the tree
+    export let prefix = null;
+    // (Optional) data. This can be whatever you want, for example to identifier the node afterwards 
+    export let data = null;  
 
 
     //////////////////// OTHER MEMBERS/////////////////////////
@@ -156,12 +158,12 @@
 
 <!-- DROPZONE -->
 {#if !isRootNode}
-<div class={`dropzone ${draggingOver ? 'active' : 'idle'}`} 
-    id={`dropzonebefore-${prefix}`}
-    on:dragleave={($event)=>(cancelDrag($event))}  
-    on:dragenter={($event)=>(handleDragEnter($event))}  
-    on:drop={($event) => (drop($event))} 
-    ondragover="return false"></div>
+    <div class={`dropzone ${draggingOver ? 'active' : 'idle'}`} 
+        id={`dropzonebefore-${prefix}`}
+        on:dragleave={($event)=>(cancelDrag($event))}  
+        on:dragenter={($event)=>(handleDragEnter($event))}  
+        on:drop={($event) => (drop($event))} 
+        ondragover="return false"></div>
 {/if}
 
 
@@ -180,6 +182,7 @@
 
 
 
+
 <!-- CHILDREN  -->
 {#if expanded && children}
     <ul>
@@ -187,6 +190,7 @@
             <li>
                 <svelte:self {...child} 
                     expanded
+                    data
                     prefix={getPrefix(i)}
                     on:selected 
                     on:dragenter 
