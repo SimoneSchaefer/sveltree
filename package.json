@@ -1,6 +1,6 @@
 {
-  "name": "sveltree-sveltree",
-  "version": "0.0.1",
+  "name": "sveltree",
+  "version": "0.0.1-pre",
   "svelte": "src/index.js",
   "module": "dist/index.mjs",
   "main": "dist/index.js",

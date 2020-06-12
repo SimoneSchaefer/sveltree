@@ -122,6 +122,8 @@
     <Dropzone on:drop prefix={prefix}/>
 {/if}
 
+
+
 <!-- DISPLAY ELEMENT -->
 <div draggable=true 
     on:dragstart={($event) => (dragStart($event))} 
@@ -148,7 +150,6 @@
                 <svelte:self 
                     {...child} 
                     internalOptions={internalOptions}
-                    data={data}
                     expanded={expanded}
                     prefix={getPrefix(i)}
                     on:selected 

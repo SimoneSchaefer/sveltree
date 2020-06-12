@@ -6,6 +6,7 @@
 
     export let treeItems;
     export let options;
+    export let data;
 
     let internalOptions = {
         labelFormatter: () => import ('./DefaultLabelFormatter.svelte'),

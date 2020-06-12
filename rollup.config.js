@@ -11,10 +11,14 @@ const name = pkg.name
 export default {
 	input: 'src/index.js',
 	output: [
-		{ file: pkg.module, 'format': 'es' },
-    { file: pkg.main, 'format': 'umd', name },
-    { file: pkg.main.replace('.js','.min.js'), format: 'iife', name, plugins: [terser()]}
+		{ folder: pkg.module, 'format': 'es' },
+    	{ folder: pkg.main, 'format': 'umd', name },
+    	{ folder: pkg.main.replace('.js','.min.js'), format: 'iife', name, plugins: [terser()]}
 	],
+	/*output: {
+		file: 'public/bundle.js',
+		format: 'es'
+	  },*/
 	plugins: [
 		svelte(),
 		resolve()
